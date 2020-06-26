@@ -18,7 +18,7 @@ schema.extendType({
             type: "ShippingAgent",
             list: true,
             resolve(_root, _args, ctx) {
-                return ctx.db.shippingAgents
+                return ctx.db.shippingAgents.findMany()
             }
         })
     }

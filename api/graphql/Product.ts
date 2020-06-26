@@ -40,7 +40,7 @@ schema.extendType({
             type: "Product",
             list: true,
             resolve(_root, _args, ctx) {
-                return ctx.db.products
+                return ctx.db.products.findMany()
             }
         })
     }
@@ -60,16 +60,14 @@ schema.extendType({
                 quantity: schema.intArg({ required: true }),
             },
             resolve(_root, args, ctx) {
-                let product = {
+                const product = {
                     color: args.color,
-                    grade: args.grade,
-                    variety: args.variety,
-                    quantity: args.quantity
+                    length: args.length,
+                    quantity: args.quantity,
+                    variety: args.variety
                 }
 
-                // ctx.db.products.push(product)
-
-                return product
+                return ctx.db.products.create({ data: product })
             }
         })
     }

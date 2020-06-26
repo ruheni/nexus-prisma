@@ -26,15 +26,15 @@ schema.extendType({
             type: 'Order',
             list: true,
             resolve(_root, _args, ctx) {
-                return ctx.db.orders
+                return ctx.db.orders.findMany({ where: { orderStatus: "REVIEWED" } })
             }
         })
-        t.field('incompleteOrders', {
+        t.field('pendingOrders', {
             nullable: false,
             type: 'Order',
             list: true,
             resolve(_root, _args, ctx) {
-                return ctx.db.orders
+                return ctx.db.orders.findMany({ where: { orderStatus: "PENDING" } })
             }
         })
     }

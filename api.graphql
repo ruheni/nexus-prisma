@@ -72,7 +72,7 @@ type Product {
 type Query {
   completedOrders: [Order!]!
   customers: [Customer!]!
-  incompleteOrders: [Order!]!
+  pendingOrders: [Order!]!
   products: [Product!]!
   shippingAgents: [ShippingAgent!]!
   users: [User!]!
