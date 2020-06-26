@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nexus": "^0.24.2"
+    "nexus": "^0.24.2",
+    "nexus-plugin-prisma": "^0.10.0"
   }
 }

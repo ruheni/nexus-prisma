@@ -1,5 +1,11 @@
 import { schema } from 'nexus'
 
+schema.enumType({
+    name: 'Role',
+    members: ["SALES_EXEC", "GENERAL_MANAGER", "STOCK_CLERK", "ADMIN"],
+    description: "These are the different roles supported on the platform"
+})
+
 schema.objectType({
     name: 'User',
     definition(t) {
@@ -8,7 +14,10 @@ schema.objectType({
         t.string('lastName')
         t.string('email')
         t.string('password')
-        t.string('role')
+        t.field("role", {
+            type: "Role",
+            nullable: false
+        })
     }
 })
 

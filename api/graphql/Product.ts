@@ -1,5 +1,17 @@
 import { schema } from 'nexus'
 
+schema.enumType({
+    name: "Grade",
+    members: ["GRADED", "UNGRADED"],
+    description: "Flower grades"
+})
+
+schema.enumType({
+    name: "Color",
+    members: ["WHITE", "LILAC", "PINK", "CERISE", "RED", "ORANGE", "YELLOW", "PEACH", "BI_COLOUR",],
+    description: "Flower colors"
+})
+
 schema.objectType({
     name: 'Product',
     definition(t) {
@@ -9,6 +21,14 @@ schema.objectType({
         t.string('grade')
         t.string('variety')
         t.int('quantity')
+        t.field('grade', {
+            nullable: false,
+            type: "Grade",
+        })
+        t.field('color', {
+            nullable: false,
+            type: "Color"
+        })
     }
 })
 
@@ -47,7 +67,7 @@ schema.extendType({
                     quantity: args.quantity
                 }
 
-                ctx.db.products.push(product)
+                // ctx.db.products.push(product)
 
                 return product
             }

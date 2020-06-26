@@ -1,4 +1,9 @@
 import { schema } from 'nexus'
+schema.enumType({
+    name: "OrderStatus",
+    members: ["PENDING", "REVIEWED", "CANCELLED"],
+    description: "Order statuses"
+})
 
 schema.objectType({
     name: "Order",
@@ -6,8 +11,10 @@ schema.objectType({
         t.int('id')
         t.int('initialQuantity')
         t.int('finalQuantity')
-        t.string('status')
-        t.date('date')
+        t.field('orderStatus', {
+            type: 'OrderStatus',
+            nullable: false,
+        })
     }
 })
 
