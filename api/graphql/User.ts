@@ -29,7 +29,7 @@ schema.extendType({
             type: 'User',
             list: true,
             resolve(_root, _args, ctx) {
-                return ctx.db.users.findMany()
+                return ctx.db.user.findMany()
             }
         })
     }

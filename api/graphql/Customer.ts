@@ -20,7 +20,7 @@ schema.extendType({
             type: 'Customer',
             list: true,
             resolve(_root, _args, ctx) {
-                return ctx.db.customers.findMany()
+                return ctx.db.customer.findMany()
             }
         })
     }

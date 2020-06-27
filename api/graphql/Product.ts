@@ -40,7 +40,7 @@ schema.extendType({
             type: "Product",
             list: true,
             resolve(_root, _args, ctx) {
-                return ctx.db.products.findMany()
+                return ctx.db.product.findMany()
             }
         })
     }
@@ -59,7 +59,7 @@ schema.extendType({
                 variety: schema.stringArg({ required: true }),
                 quantity: schema.intArg({ required: true }),
             },
-            resolve(_root, args, ctx) {
+            async resolve(_root, args, ctx) {
                 const product = {
                     color: args.color,
                     length: args.length,
@@ -67,7 +67,7 @@ schema.extendType({
                     variety: args.variety
                 }
 
-                return ctx.db.products.create({ data: product })
+                return await ctx.db.product.create({ data: product })
             }
         })
     }
