@@ -16,9 +16,7 @@ schema.objectType({
     name: 'Product',
     definition(t) {
         t.int('id')
-        t.string('color')
         t.int('length')
-        t.string('grade')
         t.string('variety')
         t.int('quantity')
         t.field('grade', {
@@ -59,15 +57,16 @@ schema.extendType({
                 variety: schema.stringArg({ required: true }),
                 quantity: schema.intArg({ required: true }),
             },
-            async resolve(_root, args, ctx) {
+            resolve(_root, args, ctx) {
                 const product = {
                     color: args.color,
                     length: args.length,
                     quantity: args.quantity,
-                    variety: args.variety
+                    variety: args.variety,
+                    grade: args.grade
                 }
 
-                return await ctx.db.product.create({ data: product })
+                return ctx.db.product.create({ data: product })
             }
         })
     }
