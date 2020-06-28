@@ -34,12 +34,22 @@ schema.extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('products', {
-			nullable: false,
 			type: 'Product',
+			nullable: false,
 			list: true,
 			resolve(_root, _args, ctx) {
 				return ctx.db.product.findMany()
 			},
+		})
+		t.field('productDetails', {
+			type: 'Product',
+			nullable: false,
+			args: {
+				id: schema.intArg({ required: true })
+			},
+			resolve(_root, { id }, ctx) {
+				return ctx.db.product.findOne({ where: { id } })
+			}
 		})
 	},
 })

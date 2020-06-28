@@ -19,12 +19,12 @@ schema.objectType({
 		})
 		t.field('customer', {
 			type: 'Customer',
-			nullable: false
+			nullable: false,
 		})
 		t.field('products', {
 			type: 'Product',
 			nullable: false,
-			list: true
+			list: true,
 		})
 	},
 })
@@ -32,21 +32,34 @@ schema.objectType({
 schema.extendType({
 	type: 'Query',
 	definition(t) {
-		t.field('completedOrders', {
-			nullable: false,
+		t.field('orders', {
 			type: 'Order',
+			nullable: false,
 			list: true,
 			resolve(_root, _args, ctx) {
-				return ctx.db.order.findMany({ where: { status: 'REVIEWED' } })
-			},
+				return ctx.db.order.findMany()
+			}
 		})
-		t.field('pendingOrders', {
-			nullable: false,
+		t.field('ordersByStatus', {
 			type: 'Order',
+			// nullable: false,
 			list: true,
-			resolve(_root, _args, ctx) {
-				return ctx.db.order.findMany({ where: { status: 'PENDING' } })
+			args: {
+				status: schema.stringArg({ required: true }),
+			},
+			resolve(_root, { status }, ctx) {
+				return ctx.db.order.findMany({ where: { status } })
 			},
 		})
-	},
+		t.field('orderDetails', {
+			type: 'Order',
+			nullable: false,
+			args: {
+				id: schema.intArg({ required: true }),
+			},
+			resolve(_root, { id }, ctx) {
+				return ctx.db.order.findOne({ where: { id: id } })
+			}
+		})
+	}
 })

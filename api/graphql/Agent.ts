@@ -10,7 +10,7 @@ schema.objectType({
 		t.field('customers', {
 			type: 'Customer',
 			list: true,
-			nullable: false
+			nullable: false,
 		})
 	},
 })
@@ -19,12 +19,22 @@ schema.extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('agents', {
-			nullable: false,
 			type: 'Agent',
+			nullable: false,
 			list: true,
 			resolve(_root, _args, ctx) {
 				return ctx.db.agent.findMany()
 			},
+		})
+		t.field('agentDetails', {
+			type: 'Agent',
+			nullable: false,
+			args: {
+				id: schema.intArg({ required: true })
+			},
+			resolve(_root, { id }, ctx) {
+				return ctx.db.agent.findOne({ where: { id } })
+			}
 		})
 	},
 })

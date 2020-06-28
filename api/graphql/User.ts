@@ -25,12 +25,22 @@ schema.extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('users', {
-			nullable: false,
 			type: 'User',
+			nullable: false,
 			list: true,
 			resolve(_root, _args, ctx) {
 				return ctx.db.user.findMany()
 			},
+		})
+		t.field('userDetails', {
+			type: 'User',
+			nullable: false,
+			args: {
+				id: schema.intArg({ required: true })
+			},
+			resolve(_root, { id }, ctx) {
+				return ctx.db.user.findOne({ where: { id } })
+			}
 		})
 	},
 })
