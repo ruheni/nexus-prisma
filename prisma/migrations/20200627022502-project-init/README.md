@@ -136,5 +136,3 @@ migration ..20200627022502-project-init
 +    CANCELLED
 +}
 ```
-
-

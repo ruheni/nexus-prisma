@@ -47,6 +47,7 @@ type Mutation {
 }
 
 type Order {
+  date: DateTime
   finalQuantity: Int
   id: Int
   initialQuantity: Int

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nexus dev",
-    "build": "nexus build"
+    "build": "nexus build",
+    "start": "node .nexus/build/api",
+    "format": "npx prettier --write './**/*.{ts,md}'"
   },
   "keywords": [
     "Nexus",
@@ -19,5 +21,16 @@
   "dependencies": {
     "nexus": "^0.24.2",
     "nexus-plugin-prisma": "^0.10.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.0.5"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "printWidth": 120,
+    "useTabs": true,
+    "tabWidth": 2
   }
 }
