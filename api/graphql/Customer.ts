@@ -9,6 +9,15 @@ schema.objectType({
 		t.string('market')
 		t.string('email')
 		t.string('phoneNumber')
+		t.field('agents', {
+			type: "Agent",
+			list: true,
+		})
+		t.field('orders', {
+			type: 'Order',
+			nullable: false,
+			list: true
+		})
 	},
 })
 

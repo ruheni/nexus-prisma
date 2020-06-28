@@ -2,6 +2,14 @@
 ### Do not make changes to this file directly
 
 
+type Agent {
+  customers: [Customer!]!
+  email: String
+  id: Int
+  name: String
+  phoneNumber: String
+}
+
 """Flower colors"""
 enum Color {
   BI_COLOUR
@@ -16,11 +24,13 @@ enum Color {
 }
 
 type Customer {
+  agents: [Agent!]
   contactName: String
   email: String
   id: Int
   market: String
   name: String
+  orders: [Order!]!
   phoneNumber: String
 }
 
@@ -47,11 +57,13 @@ type Mutation {
 }
 
 type Order {
-  date: DateTime
+  createdAt: DateTime
+  customer: Customer!
   finalQuantity: Int
   id: Int
   initialQuantity: Int
-  orderStatus: OrderStatus!
+  products: [Product!]!
+  status: OrderStatus!
 }
 
 """Order statuses"""
@@ -71,11 +83,11 @@ type Product {
 }
 
 type Query {
+  agents: [Agent!]!
   completedOrders: [Order!]!
   customers: [Customer!]!
   pendingOrders: [Order!]!
   products: [Product!]!
-  shippingAgents: [ShippingAgent!]!
   users: [User!]!
 }
 
@@ -85,13 +97,6 @@ enum Role {
   GENERAL_MANAGER
   SALES_EXEC
   STOCK_CLERK
-}
-
-type ShippingAgent {
-  email: String
-  id: Int
-  name: String
-  phoneNumber: String
 }
 
 type User {

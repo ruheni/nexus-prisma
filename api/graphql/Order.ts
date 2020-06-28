@@ -1,4 +1,5 @@
 import { schema } from 'nexus'
+
 schema.enumType({
 	name: 'OrderStatus',
 	members: ['PENDING', 'REVIEWED', 'CANCELLED'],
@@ -11,10 +12,19 @@ schema.objectType({
 		t.int('id')
 		t.int('initialQuantity')
 		t.int('finalQuantity')
-		t.date('date')
-		t.field('orderStatus', {
+		t.date('createdAt')
+		t.field('status', {
 			type: 'OrderStatus',
 			nullable: false,
+		})
+		t.field('customer', {
+			type: 'Customer',
+			nullable: false
+		})
+		t.field('products', {
+			type: 'Product',
+			nullable: false,
+			list: true
 		})
 	},
 })
@@ -27,7 +37,7 @@ schema.extendType({
 			type: 'Order',
 			list: true,
 			resolve(_root, _args, ctx) {
-				return ctx.db.order.findMany({ where: { orderStatus: 'REVIEWED' } })
+				return ctx.db.order.findMany({ where: { status: 'REVIEWED' } })
 			},
 		})
 		t.field('pendingOrders', {
@@ -35,7 +45,7 @@ schema.extendType({
 			type: 'Order',
 			list: true,
 			resolve(_root, _args, ctx) {
-				return ctx.db.order.findMany({ where: { orderStatus: 'PENDING' } })
+				return ctx.db.order.findMany({ where: { status: 'PENDING' } })
 			},
 		})
 	},
