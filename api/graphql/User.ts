@@ -14,6 +14,7 @@ schema.objectType({
 		t.string('lastName')
 		t.string('email')
 		t.string('password')
+		t.date('createdAt')
 		t.field('role', {
 			type: 'Role',
 			nullable: false,

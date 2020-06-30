@@ -19,6 +19,7 @@ schema.objectType({
 		t.int('length')
 		t.string('variety')
 		t.int('quantity')
+		t.date('createdAt')
 		t.field('grade', {
 			nullable: false,
 			type: 'Grade',
