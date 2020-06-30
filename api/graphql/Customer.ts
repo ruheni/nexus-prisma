@@ -32,7 +32,7 @@ schema.extendType({
 				return ctx.db.customer.findMany()
 			},
 		})
-		t.field('customerDetails', {
+		t.field('customerProfile', {
 			type: 'Customer',
 			nullable: false,
 			args: {

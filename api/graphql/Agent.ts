@@ -26,7 +26,7 @@ schema.extendType({
 				return ctx.db.agent.findMany()
 			},
 		})
-		t.field('agentDetails', {
+		t.field('agentProfile', {
 			type: 'Agent',
 			nullable: false,
 			args: {

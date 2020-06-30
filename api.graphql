@@ -85,14 +85,14 @@ type Product {
 type Query {
   agentProfile(id: Int!): Agent!
   agents: [Agent!]!
-  customerDetails(id: Int!): Customer!
+  customerProfile(id: Int!): Customer!
   customers: [Customer!]!
   orderDetails(id: Int!): Order!
   orders: [Order!]!
   ordersByStatus(status: String!): [Order!]
   productDetails(id: Int!): Product!
   products: [Product!]!
-  userDetails(id: Int!): User!
+  userProfile(id: Int!): User!
   users: [User!]!
 }
 
