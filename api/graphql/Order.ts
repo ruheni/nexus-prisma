@@ -9,23 +9,13 @@ schema.enumType({
 schema.objectType({
 	name: 'Order',
 	definition(t) {
-		t.int('id')
-		t.int('initialQuantity')
-		t.int('finalQuantity')
-		t.date('createdAt')
-		t.field('status', {
-			type: 'OrderStatus',
-			nullable: false,
-		})
-		t.field('customer', {
-			type: 'Customer',
-			nullable: false,
-		})
-		t.field('products', {
-			type: 'Product',
-			nullable: false,
-			list: true,
-		})
+		t.model.id()
+		t.model.initialQuantity()
+		t.model.finalQuantity()
+		t.model.status()
+		t.model.Customer()
+		t.model.product()
+		t.model.createdAt()
 	},
 })
 

@@ -3,19 +3,18 @@ import { schema } from 'nexus'
 schema.objectType({
 	name: 'Customer',
 	definition(t) {
-		t.int('id')
-		t.string('name')
-		t.string('contactName')
-		t.string('market')
-		t.string('email')
-		t.string('phoneNumber')
-		t.field('agents', {
-			type: 'Agent',
-			list: true,
+		t.model.id()
+		t.model.name()
+		t.model.contactName()
+		t.model.email()
+		t.model.agents({
+			filtering: true,
+			ordering: true,
 		})
-		t.field('orders', {
-			type: 'Order',
-			list: true,
+		t.model.orders({
+			pagination: true,
+			filtering: true,
+			ordering: true
 		})
 	},
 })
@@ -55,18 +54,21 @@ schema.extendType({
 				contactName: schema.stringArg({ required: true }),
 				market: schema.stringArg({ required: true }),
 				email: schema.stringArg({ required: true }),
-				phoneNumber: schema.stringArg({ required: true })
+				phoneNumber: schema.stringArg({ required: true }),
+				agentName: schema.stringArg(),
+				agentContactName: schema.stringArg(),
+				agentEmail: schema.stringArg(),
 			},
 			resolve(_root, args, ctx) {
-				const customer = {
-					name: args.name,
-					contactName: args.contactName,
-					market: args.market,
-					email: args.email,
-					phoneNumber: args.phoneNumber
-				}
-
-				return ctx.db.customer.create({ data: customer })
+				return ctx.db.customer.create({
+					data: {
+						name: args.name,
+						contactName: args.contactName,
+						email: args.contactName,
+						market: args.market,
+						phoneNumber: args.phoneNumber,
+					},
+				})
 			}
 		})
 		t.field('updateCustomer', {

@@ -15,19 +15,13 @@ schema.enumType({
 schema.objectType({
 	name: 'Product',
 	definition(t) {
-		t.int('id')
-		t.int('length')
-		t.string('variety')
-		t.int('quantity')
-		t.date('createdAt')
-		t.field('grade', {
-			nullable: false,
-			type: 'Grade',
-		})
-		t.field('color', {
-			nullable: false,
-			type: 'Color',
-		})
+		t.model.id()
+		t.model.length()
+		t.model.variety()
+		t.model.quantity()
+		t.model.createdAt()
+		t.model.grade()
+		t.model.color()
 	},
 })
 

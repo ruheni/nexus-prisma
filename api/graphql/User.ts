@@ -9,16 +9,13 @@ schema.enumType({
 schema.objectType({
 	name: 'User',
 	definition(t) {
-		t.int('id')
-		t.string('firstName')
-		t.string('lastName')
-		t.string('email')
-		t.string('password')
-		t.date('createdAt')
-		t.field('role', {
-			type: 'Role',
-			nullable: false,
-		})
+		t.model.id()
+		t.model.firstName()
+		t.model.lastName()
+		t.model.email()
+		t.model.password()
+		t.model.role()
+		t.model.createdAt()
 	},
 })
 
