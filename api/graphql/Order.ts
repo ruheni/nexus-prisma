@@ -20,7 +20,8 @@ schema.objectType({
 	},
 })
 
-schema.queryType({
+schema.extendType({
+	type: 'Query',
 	definition(t) {
 		t.field('orders', {
 			type: 'Order',
@@ -55,14 +56,15 @@ schema.queryType({
 
 
 
-schema.mutationType({
+schema.extendType({
+	type: 'Mutation',
 	definition(t) {
 		t.field('createOrder', {
 			type: 'Order',
 			args: {
 				initialQuantity: schema.intArg({ required: true }),
 				customerId: schema.intArg({ required: true }),
-				productIds: schema.intArg({ required: true }),
+				productId: schema.intArg({ required: true }),
 				date: schema.stringArg({ required: true }),
 			},
 			resolve(_root, args, ctx) {
@@ -76,7 +78,7 @@ schema.mutationType({
 							connect: { id: args.customerId }
 						},
 						products: {
-							connect: { id: args.productIds }
+							connect: { id: args.productId }
 						},
 					}
 				})

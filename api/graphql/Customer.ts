@@ -21,7 +21,8 @@ schema.objectType({
 	},
 })
 
-schema.queryType({
+schema.extendType({
+	type: 'Query',
 	definition(t) {
 		t.field('customers', {
 			type: 'Customer',
@@ -37,14 +38,17 @@ schema.queryType({
 			args: {
 				id: schema.intArg({ required: true })
 			},
-			resolve(_root, { id }, ctx) {
-				return ctx.db.customer.findOne({ where: { id } })
+			resolve(_root, args, ctx) {
+				return ctx.db.customer.findOne({
+					where: { id: args.id }
+				})
 			}
 		})
 	},
 })
 
-schema.mutationType({
+schema.extendType({
+	type: 'Mutation',
 	definition(t) {
 		t.field('createCustomer', {
 			type: 'Customer',

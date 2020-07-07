@@ -12,7 +12,8 @@ schema.objectType({
 	},
 })
 
-schema.queryType({
+schema.extendType({
+	type: 'Query',
 	definition(t) {
 		t.field('agents', {
 			type: 'Agent',
@@ -35,7 +36,8 @@ schema.queryType({
 	},
 })
 
-schema.mutationType({
+schema.extendType({
+	type: 'Mutation',
 	definition(t) {
 		t.field('createAgent', {
 			type: "Agent",

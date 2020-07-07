@@ -44,6 +44,11 @@ input AgentWhereUniqueInput {
   id: Int
 }
 
+type AuthPayload {
+  token: String
+  User: User
+}
+
 """Flower colors"""
 enum Color {
   BI_COLOUR
@@ -126,12 +131,15 @@ scalar Json
 type Mutation {
   createAgent(customerId: Int!, email: String!, name: String!, phoneNumber: String!): Agent
   createCustomer(agentId: Int!, contactName: String!, email: String!, market: String!, name: String!, phoneNumber: String!): Customer!
-  createOrder(customerId: Int!, date: String!, initialQuantity: Int!, productIds: Int!): Order
+  createOrder(customerId: Int!, date: String!, initialQuantity: Int!, productId: Int!): Order
   createProduct(color: String!, grade: String!, length: Int!, quantity: Int!, variety: String!): Product
+  login(email: String!, password: String!): AuthPayload
+  signup(email: String!, firstName: String!, lastName: String!, password: String!, role: String!): AuthPayload
   updateAgent(email: String!, id: Int!, name: String!, phoneNumber: String!): Agent!
   updateCustomer(contactName: String!, email: String!, id: Int!, market: String!, name: String!, phoneNumber: String!): Customer!
   updateOrder(finalQuantity: Int!, id: Int!, productIds: Int, status: String!): Order
   updateProduct(color: String!, grade: String!, id: Int!, length: Int!, quantity: Int!, variety: String!): Product
+  updateUser(email: String!, firstName: String!, id: Int!, lastName: String!, password: String!, role: String!): User
 }
 
 input NullableIntFilter {
@@ -244,7 +252,7 @@ type Query {
   orders: [Order!]!
   productDetails(id: Int!): Product!
   products: [Product!]!
-  userProfile(id: Int!): User!
+  userProfile(email: String!, id: Int): User!
   users: [User!]!
 }
 

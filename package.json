@@ -18,11 +18,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.5.1",
     "nexus": "^0.25.0",
     "nexus-plugin-jwt-auth": "^1.2.0",
-    "nexus-plugin-prisma": "^0.16.1"
+    "nexus-plugin-prisma": "^0.16.1",
+    "nexus-plugin-shield": "^0.2.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.0",
     "prettier": "^2.0.5"
   },
   "prettier": {

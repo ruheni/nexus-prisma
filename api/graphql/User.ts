@@ -1,5 +1,7 @@
 import { schema } from 'nexus'
-import { arg } from 'nexus/components/schema'
+import { hash, compare } from 'bcryptjs'
+import { sign } from 'jsonwebtoken'
+import { APP_SECRET } from '../utils'
 
 schema.enumType({
 	name: 'Role',
@@ -20,7 +22,8 @@ schema.objectType({
 	},
 })
 
-schema.queryType({
+schema.extendType({
+	type: 'Query',
 	definition(t) {
 		t.field('users', {
 			type: 'User',
@@ -34,20 +37,26 @@ schema.queryType({
 			type: 'User',
 			nullable: false,
 			args: {
-				id: schema.intArg({ required: true })
+				id: schema.intArg({ nullable: true }),
+				email: schema.stringArg({ nullable: false }),
 			},
-			resolve(_root, { id }, ctx) {
-				return ctx.db.user.findOne({ where: { id } })
+			resolve(_root, args, ctx) {
+				return ctx.db.user.findOne({
+					where: {
+						id: args?.id,
+						email: args?.email
+					}
+				})
 			}
 		})
 	},
 })
 
-schema.mutationType({
+schema.extendType({
+	type: 'Mutation',
 	definition(t) {
-		// TODO - user authentication(signup) logic here
 		t.field('signup', {
-			type: 'User',
+			type: 'AuthPayload',
 			args: {
 				firstName: schema.stringArg({ nullable: false }),
 				lastName: schema.stringArg({ nullable: false }),
@@ -55,58 +64,74 @@ schema.mutationType({
 				password: schema.stringArg({ nullable: false }),
 				role: schema.stringArg({ nullable: false }),
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.user.create({
+			resolve: async (_root, { firstName, lastName, email, password, role }, ctx) => {
+
+				const hashedPassword = await hash(password, 10)
+				const user = await ctx.db.user.create({
 					data: {
-						firstName: args.firstName,
-						lastName: args.lastName,
-						email: args.email,
-						// TODO - hash passwords
-						password: args.password,
-						// TODO - enum role
-						role: args.role
+						firstName,
+						lastName,
+						email,
+						password: hashedPassword,
+						role
 					}
 				})
+
+				return {
+					token: sign({ userId: user.id }, APP_SECRET),
+					user
+				}
 			}
 		})
-		// TODO - user authentication(login) logic here
 		t.field('login', {
-			type: 'User',
+			type: 'AuthPayload',
 			args: {
 				email: schema.stringArg({ nullable: false }),
 				password: schema.stringArg({ nullable: false })
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.user.update({
-					where: { email: args.email },
-					data: {
-						email: args.email,
-						password: args.password
-					}
+			resolve: async (_root, { email, password }, ctx) => {
+				const user = await ctx.db.user.findOne({
+					where: {
+						email,
+					},
 				})
+
+				if (!user) {
+					throw new Error(`No user found fo email: ${email}`)
+				}
+
+				const validPassword = await compare(password, user.password)
+				if (!validPassword) {
+					throw new Error('Invalid password')
+				}
+
+				return {
+					token: sign({ userId: user.id }, APP_SECRET),
+					user,
+				}
 			}
 		})
 		t.field('updateUser', {
 			type: 'User',
 			args: {
-				id: schema.intArg(),
-				firstName: schema.stringArg(),
-				lastName: schema.stringArg(),
-				email: schema.stringArg(),
-				password: schema.stringArg(),
-				role: schema.stringArg(),
+				id: schema.intArg({ nullable: false }),
+				firstName: schema.stringArg({ nullable: false }),
+				lastName: schema.stringArg({ nullable: false }),
+				email: schema.stringArg({ nullable: false }),
+				password: schema.stringArg({ nullable: false }),
+				role: schema.stringArg({ nullable: false }),
 			},
-			resolve(_root, args, ctx) {
+			resolve(_root, { id, firstName, lastName, email, password }, ctx) {
 				return ctx.db.user.update({
-					where: { id: args.id },
+					where: { id },
 					data: {
-						firstName: args.firstName,
-						lastName: args.lastName,
-						email: args.email,
+						firstName,
+						lastName,
+						email,
 						// TODO - hash passwords
-						password: args.password,
+						password,
 						// TODO - enum role
-						role: args.role
+						role
 					}
 				})
 			}

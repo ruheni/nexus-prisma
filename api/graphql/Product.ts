@@ -25,7 +25,8 @@ schema.objectType({
 	},
 })
 
-schema.queryType({
+schema.extendType({
+	type: 'Query',
 	definition(t) {
 		t.field('products', {
 			type: 'Product',
@@ -48,7 +49,8 @@ schema.queryType({
 	},
 })
 
-schema.mutationType({
+schema.extendType({
+	type: 'Mutation',
 	definition(t) {
 		t.field('createProduct', {
 			type: 'Product',
