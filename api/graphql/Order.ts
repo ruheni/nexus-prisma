@@ -35,7 +35,10 @@ schema.extendType({
 			type: 'Order',
 			list: true,
 			args: {
-				status: schema.stringArg({ required: true }),
+				status: schema.arg({
+					type: 'OrderStatus',
+					required: true
+				}),
 			},
 			resolve(_root, { status }, ctx) {
 				return ctx.db.order.findMany({ where: { status } })
@@ -89,18 +92,18 @@ schema.extendType({
 			args: {
 				id: schema.intArg({ required: true }),
 				finalQuantity: schema.intArg({ nullable: false }),
-				status: schema.stringArg({ nullable: false }),
+				status: schema.arg({
+					type: 'OrderStatus',
+					nullable: false
+				}),
 				productIds: schema.intArg()
 			},
-			resolve(_root, args, ctx) {
+			resolve(_root, { id, finalQuantity, status, productIds }, ctx) {
 				return ctx.db.order.update({
-					where: {
-						id: args.id
-					},
+					where: { id },
 					data: {
-						finalQuantity: args.finalQuantity,
-						// TODO create Input type to update order status - enums
-						status: args.status,
+						finalQuantity,
+						status
 					}
 				})
 			}

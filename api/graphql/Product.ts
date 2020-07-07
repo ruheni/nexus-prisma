@@ -40,7 +40,7 @@ schema.extendType({
 			type: 'Product',
 			nullable: false,
 			args: {
-				id: schema.intArg({ required: true })
+				id: schema.intArg({ nullable: true })
 			},
 			resolve(_root, { id }, ctx) {
 				return ctx.db.product.findOne({ where: { id } })
@@ -55,8 +55,14 @@ schema.extendType({
 		t.field('createProduct', {
 			type: 'Product',
 			args: {
-				color: schema.stringArg({ required: true }),
-				grade: schema.stringArg({ required: true }),
+				color: schema.arg({
+					type: 'Color',
+					required: true
+				}),
+				grade: schema.arg({
+					type: 'Grade',
+					required: true
+				}),
 				length: schema.intArg({ nullable: false }),
 				variety: schema.stringArg({ nullable: false }),
 				quantity: schema.intArg({ nullable: false }),
@@ -67,7 +73,6 @@ schema.extendType({
 						length: args.length,
 						quantity: args.quantity,
 						variety: args.variety,
-						// TODO create input type to support enums for color and grade
 						color: args.color,
 						grade: args.grade,
 					}
@@ -78,9 +83,15 @@ schema.extendType({
 			type: 'Product',
 			args: {
 				id: schema.intArg({ required: true }),
-				color: schema.stringArg({ nullable: false }),
+				color: schema.arg({
+					type: 'Color',
+					required: true
+				}),
+				grade: schema.arg({
+					type: 'Grade',
+					required: true
+				}),
 				length: schema.intArg({ nullable: false }),
-				grade: schema.stringArg({ nullable: false }),
 				variety: schema.stringArg({ nullable: false }),
 				quantity: schema.intArg({ nullable: false }),
 			},
@@ -91,7 +102,6 @@ schema.extendType({
 						length: args.length,
 						quantity: args.quantity,
 						variety: args.variety,
-						// TODO create input type to support enums for color and grade
 						color: args.color,
 						grade: args.grade,
 					}

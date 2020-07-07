@@ -43,7 +43,7 @@ schema.extendType({
 			resolve(_root, args, ctx) {
 				return ctx.db.user.findOne({
 					where: {
-						id: args?.id,
+						id: args.id,
 						email: args?.email
 					}
 				})
@@ -62,7 +62,10 @@ schema.extendType({
 				lastName: schema.stringArg({ nullable: false }),
 				email: schema.stringArg({ nullable: false }),
 				password: schema.stringArg({ nullable: false }),
-				role: schema.stringArg({ nullable: false }),
+				role: schema.arg({
+					type: 'Role',
+					nullable: false
+				}),
 			},
 			resolve: async (_root, { firstName, lastName, email, password, role }, ctx) => {
 
@@ -119,18 +122,20 @@ schema.extendType({
 				lastName: schema.stringArg({ nullable: false }),
 				email: schema.stringArg({ nullable: false }),
 				password: schema.stringArg({ nullable: false }),
-				role: schema.stringArg({ nullable: false }),
+				role: schema.arg({
+					type: 'Role',
+					nullable: false
+				}),
 			},
-			resolve(_root, { id, firstName, lastName, email, password }, ctx) {
+			resolve(_root, { id, firstName, lastName, email, password, role }, ctx) {
+				// TODO - hash passwords
 				return ctx.db.user.update({
 					where: { id },
 					data: {
 						firstName,
 						lastName,
 						email,
-						// TODO - hash passwords
 						password,
-						// TODO - enum role
 						role
 					}
 				})
