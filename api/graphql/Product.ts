@@ -25,8 +25,7 @@ schema.objectType({
 	},
 })
 
-schema.extendType({
-	type: 'Query',
+schema.queryType({
 	definition(t) {
 		t.field('products', {
 			type: 'Product',
@@ -49,30 +48,53 @@ schema.extendType({
 	},
 })
 
-schema.extendType({
-	type: 'Mutation',
+schema.mutationType({
 	definition(t) {
 		t.field('createProduct', {
 			type: 'Product',
-			nullable: false,
 			args: {
 				color: schema.stringArg({ required: true }),
-				length: schema.intArg({ required: true }),
 				grade: schema.stringArg({ required: true }),
-				variety: schema.stringArg({ required: true }),
-				quantity: schema.intArg({ required: true }),
+				length: schema.intArg({ nullable: false }),
+				variety: schema.stringArg({ nullable: false }),
+				quantity: schema.intArg({ nullable: false }),
 			},
 			resolve(_root, args, ctx) {
-				const product = {
-					color: args.color,
-					length: args.length,
-					quantity: args.quantity,
-					variety: args.variety,
-					grade: args.grade,
-				}
-
-				return ctx.db.product.create({ data: product })
+				return ctx.db.product.create({
+					data: {
+						length: args.length,
+						quantity: args.quantity,
+						variety: args.variety,
+						// TODO create input type to support enums for color and grade
+						color: args.color,
+						grade: args.grade,
+					}
+				})
 			},
+		})
+		t.field('updateProduct', {
+			type: 'Product',
+			args: {
+				id: schema.intArg({ required: true }),
+				color: schema.stringArg({ nullable: false }),
+				length: schema.intArg({ nullable: false }),
+				grade: schema.stringArg({ nullable: false }),
+				variety: schema.stringArg({ nullable: false }),
+				quantity: schema.intArg({ nullable: false }),
+			},
+			resolve(_root, args, ctx) {
+				return ctx.db.product.update({
+					where: { id: args.id },
+					data: {
+						length: args.length,
+						quantity: args.quantity,
+						variety: args.variety,
+						// TODO create input type to support enums for color and grade
+						color: args.color,
+						grade: args.grade,
+					}
+				})
+			}
 		})
 	},
 })

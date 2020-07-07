@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "nexus": "^0.25.0",
+    "nexus-plugin-jwt-auth": "^1.2.0",
     "nexus-plugin-prisma": "^0.16.1"
   },
   "devDependencies": {

@@ -3,7 +3,9 @@
 
 
 type Agent {
+  createdAt: DateTime!
   Customer: Customer
+  email: String!
   id: Int!
   name: String!
   phoneNumber: String!
@@ -16,6 +18,7 @@ input AgentFilter {
 }
 
 input AgentOrderByInput {
+  createdAt: OrderByArg
   customerId: OrderByArg
   email: OrderByArg
   id: OrderByArg
@@ -25,6 +28,7 @@ input AgentOrderByInput {
 
 input AgentWhereInput {
   AND: [AgentWhereInput!]
+  createdAt: DateTimeFilter
   Customer: CustomerWhereInput
   customerId: NullableIntFilter
   email: StringFilter
@@ -56,10 +60,12 @@ enum Color {
 type Customer {
   agents(after: AgentWhereUniqueInput, before: AgentWhereUniqueInput, first: Int, last: Int, orderBy: AgentOrderByInput, where: AgentWhereInput): [Agent!]!
   contactName: String!
+  createdAt: DateTime!
   email: String!
   id: Int!
+  market: String!
   name: String!
-  orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int, orderBy: OrderOrderByInput, where: OrderWhereInput): [Order!]!
+  orders(orderBy: OrderOrderByInput, where: OrderWhereInput): [Order!]!
 }
 
 input CustomerWhereInput {
@@ -118,11 +124,14 @@ The `JSON` scalar type represents JSON objects as specified by [ECMA-404](http:/
 scalar Json
 
 type Mutation {
-  createAgent(email: String!, name: String!, phoneNumber: String!): Agent!
-  createCustomer(agentContactName: String, agentEmail: String, agentName: String, contactName: String!, email: String!, market: String!, name: String!, phoneNumber: String!): Customer!
-  createProduct(color: String!, grade: String!, length: Int!, quantity: Int!, variety: String!): Product!
-  updateAgent(email: String, id: Int!, name: String, phoneNumber: String): Agent!
-  updateCustomer(contactName: String, email: String, id: Int!, market: String, name: String, phoneNumber: String): Customer!
+  createAgent(customerId: Int!, email: String!, name: String!, phoneNumber: String!): Agent
+  createCustomer(agentId: Int!, contactName: String!, email: String!, market: String!, name: String!, phoneNumber: String!): Customer!
+  createOrder(customerId: Int!, date: String!, initialQuantity: Int!, productIds: Int!): Order
+  createProduct(color: String!, grade: String!, length: Int!, quantity: Int!, variety: String!): Product
+  updateAgent(email: String!, id: Int!, name: String!, phoneNumber: String!): Agent!
+  updateCustomer(contactName: String!, email: String!, id: Int!, market: String!, name: String!, phoneNumber: String!): Customer!
+  updateOrder(finalQuantity: Int!, id: Int!, productIds: Int, status: String!): Order
+  updateProduct(color: String!, grade: String!, id: Int!, length: Int!, quantity: Int!, variety: String!): Product
 }
 
 input NullableIntFilter {
@@ -139,9 +148,11 @@ input NullableIntFilter {
 type Order {
   createdAt: DateTime!
   Customer: Customer
+  date: DateTime!
   finalQuantity: Int!
   id: Int!
   initialQuantity: Int!
+  products(after: ProductWhereUniqueInput, before: ProductWhereUniqueInput, first: Int, last: Int): [Product!]!
   status: OrderStatus!
 }
 
@@ -188,10 +199,6 @@ input OrderWhereInput {
   status: OrderStatus
 }
 
-input OrderWhereUniqueInput {
-  id: Int
-}
-
 type Product {
   color: Color!
   createdAt: DateTime!
@@ -223,14 +230,18 @@ input ProductWhereInput {
   variety: StringFilter
 }
 
+input ProductWhereUniqueInput {
+  id: Int
+}
+
 type Query {
   agentProfile(id: Int!): Agent!
   agents: [Agent!]!
   customerProfile(id: Int!): Customer!
   customers: [Customer!]!
+  findOrdersByStatus(status: String!): [Order!]
   orderDetails(id: Int!): Order!
   orders: [Order!]!
-  ordersByStatus(status: String!): [Order!]
   productDetails(id: Int!): Product!
   products: [Product!]!
   userProfile(id: Int!): User!

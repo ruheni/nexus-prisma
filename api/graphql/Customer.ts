@@ -7,20 +7,21 @@ schema.objectType({
 		t.model.name()
 		t.model.contactName()
 		t.model.email()
+		t.model.market()
 		t.model.agents({
 			filtering: true,
 			ordering: true,
 		})
 		t.model.orders({
-			pagination: true,
+			pagination: false,
 			filtering: true,
 			ordering: true
 		})
+		t.model.createdAt()
 	},
 })
 
-schema.extendType({
-	type: 'Query',
+schema.queryType({
 	definition(t) {
 		t.field('customers', {
 			type: 'Customer',
@@ -43,8 +44,7 @@ schema.extendType({
 	},
 })
 
-schema.extendType({
-	type: 'Mutation',
+schema.mutationType({
 	definition(t) {
 		t.field('createCustomer', {
 			type: 'Customer',
@@ -55,9 +55,7 @@ schema.extendType({
 				market: schema.stringArg({ required: true }),
 				email: schema.stringArg({ required: true }),
 				phoneNumber: schema.stringArg({ required: true }),
-				agentName: schema.stringArg(),
-				agentContactName: schema.stringArg(),
-				agentEmail: schema.stringArg(),
+				agentId: schema.intArg({ nullable: false }),
 			},
 			resolve(_root, args, ctx) {
 				return ctx.db.customer.create({
@@ -67,6 +65,9 @@ schema.extendType({
 						email: args.contactName,
 						market: args.market,
 						phoneNumber: args.phoneNumber,
+						agents: {
+							connect: { id: args.agentId }
+						}
 					},
 				})
 			}
@@ -76,24 +77,22 @@ schema.extendType({
 			nullable: false,
 			args: {
 				id: schema.intArg({ required: true }),
-				name: schema.stringArg(),
-				contactName: schema.stringArg(),
-				market: schema.stringArg(),
-				email: schema.stringArg(),
-				phoneNumber: schema.stringArg()
+				name: schema.stringArg({ nullable: false }),
+				contactName: schema.stringArg({ nullable: false }),
+				market: schema.stringArg({ nullable: false }),
+				email: schema.stringArg({ nullable: false }),
+				phoneNumber: schema.stringArg({ nullable: false })
 			},
 			resolve(_root, args, ctx) {
-				let customer = {
-					name: args.name,
-					contactName: args.contactName,
-					market: args.market,
-					email: args.email,
-					phoneNumber: args.phoneNumber
-				}
-
 				return ctx.db.customer.update({
 					where: { id: args.id },
-					data: customer
+					data: {
+						name: args.name,
+						contactName: args.contactName,
+						market: args.market,
+						email: args.email,
+						phoneNumber: args.phoneNumber
+					}
 				})
 			}
 		})

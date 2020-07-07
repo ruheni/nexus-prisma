@@ -46,6 +46,7 @@ model Agent {
   email       String    @unique
   Customer    Customer? @relation(fields: [customerId], references: [id])
   customerId  Int?
+  createdAt   DateTime  @default(now())
 }
 
 model User {

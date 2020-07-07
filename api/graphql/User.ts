@@ -1,4 +1,5 @@
 import { schema } from 'nexus'
+import { arg } from 'nexus/components/schema'
 
 schema.enumType({
 	name: 'Role',
@@ -19,8 +20,7 @@ schema.objectType({
 	},
 })
 
-schema.extendType({
-	type: 'Query',
+schema.queryType({
 	definition(t) {
 		t.field('users', {
 			type: 'User',
@@ -41,4 +41,75 @@ schema.extendType({
 			}
 		})
 	},
+})
+
+schema.mutationType({
+	definition(t) {
+		// TODO - user authentication(signup) logic here
+		t.field('signup', {
+			type: 'User',
+			args: {
+				firstName: schema.stringArg({ nullable: false }),
+				lastName: schema.stringArg({ nullable: false }),
+				email: schema.stringArg({ nullable: false }),
+				password: schema.stringArg({ nullable: false }),
+				role: schema.stringArg({ nullable: false }),
+			},
+			resolve(_root, args, ctx) {
+				return ctx.db.user.create({
+					data: {
+						firstName: args.firstName,
+						lastName: args.lastName,
+						email: args.email,
+						// TODO - hash passwords
+						password: args.password,
+						// TODO - enum role
+						role: args.role
+					}
+				})
+			}
+		})
+		// TODO - user authentication(login) logic here
+		t.field('login', {
+			type: 'User',
+			args: {
+				email: schema.stringArg({ nullable: false }),
+				password: schema.stringArg({ nullable: false })
+			},
+			resolve(_root, args, ctx) {
+				return ctx.db.user.update({
+					where: { email: args.email },
+					data: {
+						email: args.email,
+						password: args.password
+					}
+				})
+			}
+		})
+		t.field('updateUser', {
+			type: 'User',
+			args: {
+				id: schema.intArg(),
+				firstName: schema.stringArg(),
+				lastName: schema.stringArg(),
+				email: schema.stringArg(),
+				password: schema.stringArg(),
+				role: schema.stringArg(),
+			},
+			resolve(_root, args, ctx) {
+				return ctx.db.user.update({
+					where: { id: args.id },
+					data: {
+						firstName: args.firstName,
+						lastName: args.lastName,
+						email: args.email,
+						// TODO - hash passwords
+						password: args.password,
+						// TODO - enum role
+						role: args.role
+					}
+				})
+			}
+		})
+	}
 })
