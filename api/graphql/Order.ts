@@ -30,7 +30,7 @@ schema.extendType({
 			resolve: async (_root, _args, ctx) => {
 				const orders = ctx.db.order.findMany()
 				return orders
-			}
+			},
 		})
 		t.field('findOrdersByStatus', {
 			type: 'Order',
@@ -38,7 +38,7 @@ schema.extendType({
 			args: {
 				status: schema.arg({
 					type: 'OrderStatus',
-					required: true
+					required: true,
 				}),
 			},
 			resolve: async (_root, { status }, ctx) => {
@@ -54,12 +54,10 @@ schema.extendType({
 			resolve: async (_root, { id }, ctx) => {
 				const order = await ctx.db.order.findOne({ where: { id: id } })
 				return order
-			}
+			},
 		})
-	}
+	},
 })
-
-
 
 schema.extendType({
 	type: 'Mutation',
@@ -78,18 +76,18 @@ schema.extendType({
 						initialQuantity: initialQuantity,
 						finalQuantity: initialQuantity,
 						date: date,
-						status: "PENDING",
+						status: 'PENDING',
 						Customer: {
-							connect: { id: customerId }
+							connect: { id: customerId },
 						},
 						products: {
-							connect: { id: productId }
+							connect: { id: productId },
 						},
-					}
+					},
 				})
 
 				return order
-			}
+			},
 		})
 		t.field('updateOrder', {
 			type: 'Order',
@@ -98,20 +96,20 @@ schema.extendType({
 				finalQuantity: schema.intArg({ nullable: false }),
 				status: schema.arg({
 					type: 'OrderStatus',
-					nullable: false
+					nullable: false,
 				}),
-				productIds: schema.intArg()
+				productIds: schema.intArg(),
 			},
 			resolve: async (_root, { id, finalQuantity, status, productIds }, ctx) => {
 				const order = await ctx.db.order.update({
 					where: { id },
 					data: {
 						finalQuantity,
-						status
-					}
+						status,
+					},
 				})
 				return order
-			}
+			},
 		})
-	}
+	},
 })

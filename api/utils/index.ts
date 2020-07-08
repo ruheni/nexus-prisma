@@ -2,13 +2,13 @@
 const APP_SECRET = 'super_secret_key_no-one_can_guess'
 
 const getUserId = (token: any | null | undefined) => {
-    const userId = token.userId
+	const userId = token.userId
 
-    if (!userId) {
-        throw new Error('Not Authorized')
-    }
+	if (!userId) {
+		throw new Error('Not Authorized')
+	}
 
-    return userId;
+	return userId
 }
 
 export { APP_SECRET, getUserId }

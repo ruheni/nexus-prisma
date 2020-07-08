@@ -42,11 +42,11 @@ schema.extendType({
 			resolve: async (_root, { email }, ctx) => {
 				const user = await ctx.db.user.findOne({
 					where: {
-						email: email
-					}
+						email: email,
+					},
 				})
 				return user
-			}
+			},
 		})
 	},
 })
@@ -63,11 +63,10 @@ schema.extendType({
 				password: schema.stringArg({ nullable: false }),
 				role: schema.arg({
 					type: 'Role',
-					nullable: false
+					nullable: false,
 				}),
 			},
 			resolve: async (_root, { firstName, lastName, email, password, role }, ctx) => {
-
 				const hashedPassword = await hash(password, 10)
 				const user = await ctx.db.user.create({
 					data: {
@@ -75,21 +74,21 @@ schema.extendType({
 						lastName,
 						email,
 						password: hashedPassword,
-						role
-					}
+						role,
+					},
 				})
 
 				return {
 					token: sign({ userId: user.id }, APP_SECRET),
-					user
+					user,
 				}
-			}
+			},
 		})
 		t.field('login', {
 			type: 'AuthPayload',
 			args: {
 				email: schema.stringArg({ nullable: false }),
-				password: schema.stringArg({ nullable: false })
+				password: schema.stringArg({ nullable: false }),
 			},
 			resolve: async (_root, { email, password }, ctx) => {
 				const user = await ctx.db.user.findOne({
@@ -111,7 +110,7 @@ schema.extendType({
 					token: sign({ userId: user.id }, APP_SECRET),
 					user,
 				}
-			}
+			},
 		})
 		t.field('updateUser', {
 			type: 'User',
@@ -123,11 +122,11 @@ schema.extendType({
 				password: schema.stringArg({ nullable: false }),
 				role: schema.arg({
 					type: 'Role',
-					nullable: false
+					nullable: false,
 				}),
 			},
 			resolve: async (_root, { id, firstName, lastName, email, password, role }, ctx) => {
-				let newPassword = await hash(password, 10);
+				let newPassword = await hash(password, 10)
 				const user = await ctx.db.user.update({
 					where: { id },
 					data: {
@@ -135,11 +134,11 @@ schema.extendType({
 						lastName,
 						email,
 						password: newPassword,
-						role
-					}
+						role,
+					},
 				})
 				return user
-			}
+			},
 		})
-	}
+	},
 })

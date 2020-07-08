@@ -27,15 +27,15 @@ schema.extendType({
 		t.field('agentProfile', {
 			type: 'Agent',
 			args: {
-				id: schema.intArg({ nullable: false })
+				id: schema.intArg({ nullable: false }),
 			},
 			resolve: async (_root, { id }, ctx) => {
 				const agent = await ctx.db.agent.findOne({
-					where: { id: id }
+					where: { id: id },
 				})
 
 				return agent
-			}
+			},
 		})
 	},
 })
@@ -44,12 +44,12 @@ schema.extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('createAgent', {
-			type: "Agent",
+			type: 'Agent',
 			args: {
 				name: schema.stringArg({ required: true }),
 				phoneNumber: schema.stringArg({ required: true }),
 				email: schema.stringArg({ required: true }),
-				customerId: schema.intArg({ nullable: false })
+				customerId: schema.intArg({ nullable: false }),
 			},
 			resolve: async (_root, { name, email, phoneNumber, customerId }, ctx) => {
 				const agent = await ctx.db.agent.create({
@@ -58,13 +58,13 @@ schema.extendType({
 						email: email,
 						phoneNumber: phoneNumber,
 						Customer: {
-							connect: { id: customerId }
-						}
+							connect: { id: customerId },
+						},
 					},
 				})
 
 				return agent
-			}
+			},
 		})
 		t.field('updateAgent', {
 			type: 'Agent',
@@ -78,16 +78,16 @@ schema.extendType({
 			resolve: async (_root, { name, email, phoneNumber, id }, ctx) => {
 				const agent = await ctx.db.agent.update({
 					where: {
-						id: id
+						id: id,
 					},
 					data: {
 						name: name,
 						phoneNumber: name,
-						email: phoneNumber
-					}
+						email: phoneNumber,
+					},
 				})
 				return agent
-			}
+			},
 		})
-	}
+	},
 })

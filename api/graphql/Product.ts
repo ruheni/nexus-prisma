@@ -40,17 +40,17 @@ schema.extendType({
 		t.field('productDetails', {
 			type: 'Product',
 			args: {
-				id: schema.intArg({ nullable: false })
+				id: schema.intArg({ nullable: false }),
 			},
 			resolve: async (_root, { id }, ctx) => {
 				const product = await ctx.db.product.findOne({
 					where: {
-						id: id
-					}
+						id: id,
+					},
 				})
 
 				return product
-			}
+			},
 		})
 	},
 })
@@ -63,11 +63,11 @@ schema.extendType({
 			args: {
 				color: schema.arg({
 					type: 'Color',
-					required: true
+					required: true,
 				}),
 				grade: schema.arg({
 					type: 'Grade',
-					required: true
+					required: true,
 				}),
 				length: schema.intArg({ nullable: false }),
 				variety: schema.stringArg({ nullable: false }),
@@ -81,7 +81,7 @@ schema.extendType({
 						variety: variety,
 						color: color,
 						grade: grade,
-					}
+					},
 				})
 				return product
 			},
@@ -92,11 +92,11 @@ schema.extendType({
 				id: schema.intArg({ required: true }),
 				color: schema.arg({
 					type: 'Color',
-					required: true
+					required: true,
 				}),
 				grade: schema.arg({
 					type: 'Grade',
-					required: true
+					required: true,
 				}),
 				length: schema.intArg({ nullable: false }),
 				variety: schema.stringArg({ nullable: false }),
@@ -111,12 +111,11 @@ schema.extendType({
 						variety: variety,
 						color: color,
 						grade: grade,
-					}
+					},
 				})
 
 				return product
-			}
+			},
 		})
 	},
 })
-

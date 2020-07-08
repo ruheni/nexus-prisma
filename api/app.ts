@@ -7,7 +7,7 @@ use(prisma())
 
 // enable jwt auth plugin
 use(
-    auth({
-        appSecret: APP_SECRET
-    })
+	auth({
+		appSecret: APP_SECRET,
+	}),
 )

@@ -15,7 +15,7 @@ schema.objectType({
 		t.model.orders({
 			pagination: false,
 			filtering: true,
-			ordering: true
+			ordering: true,
 		})
 		t.model.createdAt()
 	},
@@ -36,15 +36,15 @@ schema.extendType({
 		t.field('customerProfile', {
 			type: 'Customer',
 			args: {
-				id: schema.intArg({ required: true })
+				id: schema.intArg({ required: true }),
 			},
 			resolve: async (_root, { id }, ctx) => {
 				const customer = await ctx.db.customer.findOne({
-					where: { id: id }
+					where: { id: id },
 				})
 
 				return customer
-			}
+			},
 		})
 	},
 })
@@ -72,12 +72,12 @@ schema.extendType({
 						market: market,
 						phoneNumber: phoneNumber,
 						agents: {
-							connect: { id: agentId }
-						}
+							connect: { id: agentId },
+						},
 					},
-				});
+				})
 				return customer
-			}
+			},
 		})
 		t.field('updateCustomer', {
 			type: 'Customer',
@@ -88,7 +88,7 @@ schema.extendType({
 				contactName: schema.stringArg({ nullable: false }),
 				market: schema.stringArg({ nullable: false }),
 				email: schema.stringArg({ nullable: false }),
-				phoneNumber: schema.stringArg({ nullable: false })
+				phoneNumber: schema.stringArg({ nullable: false }),
 			},
 			resolve: async (_root, { id, name, contactName, market, email, phoneNumber }, ctx) => {
 				const customer = await ctx.db.customer.update({
@@ -98,11 +98,11 @@ schema.extendType({
 						contactName: contactName,
 						market: market,
 						email: email,
-						phoneNumber: phoneNumber
-					}
+						phoneNumber: phoneNumber,
+					},
 				})
 				return customer
-			}
+			},
 		})
-	}
+	},
 })

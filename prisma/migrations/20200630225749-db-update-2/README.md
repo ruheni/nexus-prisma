@@ -130,5 +130,3 @@ migration 20200627022502-project-init..20200630225749-db-update-2
 +    provider = "prisma-client-js"
 +}
 ```
-
-
