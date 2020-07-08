@@ -243,16 +243,16 @@ input ProductWhereUniqueInput {
 }
 
 type Query {
-  agentProfile(id: Int!): Agent!
+  agentProfile(id: Int!): Agent
   agents: [Agent!]!
-  customerProfile(id: Int!): Customer!
+  customerProfile(id: Int!): Customer
   customers: [Customer!]!
   findOrdersByStatus(status: OrderStatus!): [Order!]
-  orderDetails(id: Int!): Order!
+  orderDetails(id: Int!): Order
   orders: [Order!]!
-  productDetails(id: Int): Product!
+  productDetails(id: Int!): Product
   products: [Product!]!
-  userProfile(email: String!, id: Int): User!
+  userProfile(email: String!): User
   users: [User!]!
 }
 

@@ -28,20 +28,22 @@ schema.extendType({
 			type: 'Customer',
 			nullable: false,
 			list: true,
-			resolve(_root, _args, ctx) {
-				return ctx.db.customer.findMany()
+			resolve: async (_root, _args, ctx) => {
+				const customers = await ctx.db.customer.findMany()
+				return customers
 			},
 		})
 		t.field('customerProfile', {
 			type: 'Customer',
-			nullable: false,
 			args: {
 				id: schema.intArg({ required: true })
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.customer.findOne({
-					where: { id: args.id }
+			resolve: async (_root, { id }, ctx) => {
+				const customer = await ctx.db.customer.findOne({
+					where: { id: id }
 				})
+
+				return customer
 			}
 		})
 	},
@@ -61,19 +63,20 @@ schema.extendType({
 				phoneNumber: schema.stringArg({ required: true }),
 				agentId: schema.intArg({ nullable: false }),
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.customer.create({
+			resolve: async (_root, { name, contactName, market, email, phoneNumber, agentId }, ctx) => {
+				const customer = await ctx.db.customer.create({
 					data: {
-						name: args.name,
-						contactName: args.contactName,
-						email: args.contactName,
-						market: args.market,
-						phoneNumber: args.phoneNumber,
+						name: name,
+						contactName: contactName,
+						email: contactName,
+						market: market,
+						phoneNumber: phoneNumber,
 						agents: {
-							connect: { id: args.agentId }
+							connect: { id: agentId }
 						}
 					},
-				})
+				});
+				return customer
 			}
 		})
 		t.field('updateCustomer', {
@@ -87,17 +90,18 @@ schema.extendType({
 				email: schema.stringArg({ nullable: false }),
 				phoneNumber: schema.stringArg({ nullable: false })
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.customer.update({
-					where: { id: args.id },
+			resolve: async (_root, { id, name, contactName, market, email, phoneNumber }, ctx) => {
+				const customer = await ctx.db.customer.update({
+					where: { id: id },
 					data: {
-						name: args.name,
-						contactName: args.contactName,
-						market: args.market,
-						email: args.email,
-						phoneNumber: args.phoneNumber
+						name: name,
+						contactName: contactName,
+						market: market,
+						email: email,
+						phoneNumber: phoneNumber
 					}
 				})
+				return customer
 			}
 		})
 	}

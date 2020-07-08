@@ -32,18 +32,24 @@ schema.extendType({
 			type: 'Product',
 			nullable: false,
 			list: true,
-			resolve(_root, _args, ctx) {
-				return ctx.db.product.findMany()
+			resolve: async (_root, _args, ctx) => {
+				const products = await ctx.db.product.findMany()
+				return products
 			},
 		})
 		t.field('productDetails', {
 			type: 'Product',
-			nullable: false,
 			args: {
-				id: schema.intArg({ nullable: true })
+				id: schema.intArg({ nullable: false })
 			},
-			resolve(_root, { id }, ctx) {
-				return ctx.db.product.findOne({ where: { id } })
+			resolve: async (_root, { id }, ctx) => {
+				const product = await ctx.db.product.findOne({
+					where: {
+						id: id
+					}
+				})
+
+				return product
 			}
 		})
 	},
@@ -67,16 +73,17 @@ schema.extendType({
 				variety: schema.stringArg({ nullable: false }),
 				quantity: schema.intArg({ nullable: false }),
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.product.create({
+			resolve: async (_root, { length, quantity, variety, color, grade }, ctx) => {
+				const product = await ctx.db.product.create({
 					data: {
-						length: args.length,
-						quantity: args.quantity,
-						variety: args.variety,
-						color: args.color,
-						grade: args.grade,
+						length: length,
+						quantity: quantity,
+						variety: variety,
+						color: color,
+						grade: grade,
 					}
 				})
+				return product
 			},
 		})
 		t.field('updateProduct', {
@@ -95,17 +102,19 @@ schema.extendType({
 				variety: schema.stringArg({ nullable: false }),
 				quantity: schema.intArg({ nullable: false }),
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.product.update({
-					where: { id: args.id },
+			resolve: async (_root, { id, length, quantity, variety, color, grade }, ctx) => {
+				const product = await ctx.db.product.update({
+					where: { id: id },
 					data: {
-						length: args.length,
-						quantity: args.quantity,
-						variety: args.variety,
-						color: args.color,
-						grade: args.grade,
+						length: length,
+						quantity: quantity,
+						variety: variety,
+						color: color,
+						grade: grade,
 					}
 				})
+
+				return product
 			}
 		})
 	},

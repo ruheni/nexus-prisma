@@ -19,18 +19,22 @@ schema.extendType({
 			type: 'Agent',
 			nullable: false,
 			list: true,
-			resolve(_root, _args, ctx) {
-				return ctx.db.agent.findMany()
+			resolve: async (_root, _args, ctx) => {
+				const agent = await ctx.db.agent.findMany()
+				return agent
 			},
 		})
 		t.field('agentProfile', {
 			type: 'Agent',
-			nullable: false,
 			args: {
 				id: schema.intArg({ nullable: false })
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.agent.findOne({ where: { id: args.id } })
+			resolve: async (_root, { id }, ctx) => {
+				const agent = await ctx.db.agent.findOne({
+					where: { id: id }
+				})
+
+				return agent
 			}
 		})
 	},
@@ -47,17 +51,19 @@ schema.extendType({
 				email: schema.stringArg({ required: true }),
 				customerId: schema.intArg({ nullable: false })
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.agent.create({
+			resolve: async (_root, { name, email, phoneNumber, customerId }, ctx) => {
+				const agent = await ctx.db.agent.create({
 					data: {
-						name: args.name,
-						email: args.email,
-						phoneNumber: args.phoneNumber,
+						name: name,
+						email: email,
+						phoneNumber: phoneNumber,
 						Customer: {
-							connect: { id: args.customerId }
+							connect: { id: customerId }
 						}
 					},
 				})
+
+				return agent
 			}
 		})
 		t.field('updateAgent', {
@@ -69,17 +75,18 @@ schema.extendType({
 				phoneNumber: schema.stringArg({ nullable: false }),
 				email: schema.stringArg({ nullable: false }),
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.agent.update({
+			resolve: async (_root, { name, email, phoneNumber, id }, ctx) => {
+				const agent = await ctx.db.agent.update({
 					where: {
-						id: args.id
+						id: id
 					},
 					data: {
-						name: args.name,
-						phoneNumber: args.name,
-						email: args.phoneNumber
+						name: name,
+						phoneNumber: name,
+						email: phoneNumber
 					}
 				})
+				return agent
 			}
 		})
 	}

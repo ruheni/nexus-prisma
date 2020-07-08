@@ -29,24 +29,23 @@ schema.extendType({
 			type: 'User',
 			nullable: false,
 			list: true,
-			resolve(_root, _args, ctx) {
-				return ctx.db.user.findMany()
+			resolve: async (_root, _args, ctx) => {
+				const users = await ctx.db.user.findMany()
+				return users
 			},
 		})
 		t.field('userProfile', {
 			type: 'User',
-			nullable: false,
 			args: {
-				id: schema.intArg({ nullable: true }),
 				email: schema.stringArg({ nullable: false }),
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.user.findOne({
+			resolve: async (_root, { email }, ctx) => {
+				const user = await ctx.db.user.findOne({
 					where: {
-						id: args.id,
-						email: args?.email
+						email: email
 					}
 				})
+				return user
 			}
 		})
 	},
@@ -127,18 +126,19 @@ schema.extendType({
 					nullable: false
 				}),
 			},
-			resolve(_root, { id, firstName, lastName, email, password, role }, ctx) {
-				// TODO - hash passwords
-				return ctx.db.user.update({
+			resolve: async (_root, { id, firstName, lastName, email, password, role }, ctx) => {
+				let newPassword = await hash(password, 10);
+				const user = await ctx.db.user.update({
 					where: { id },
 					data: {
 						firstName,
 						lastName,
 						email,
-						password,
+						password: newPassword,
 						role
 					}
 				})
+				return user
 			}
 		})
 	}

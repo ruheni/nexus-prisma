@@ -27,8 +27,9 @@ schema.extendType({
 			type: 'Order',
 			nullable: false,
 			list: true,
-			resolve(_root, _args, ctx) {
-				return ctx.db.order.findMany()
+			resolve: async (_root, _args, ctx) => {
+				const orders = ctx.db.order.findMany()
+				return orders
 			}
 		})
 		t.field('findOrdersByStatus', {
@@ -40,18 +41,19 @@ schema.extendType({
 					required: true
 				}),
 			},
-			resolve(_root, { status }, ctx) {
-				return ctx.db.order.findMany({ where: { status } })
+			resolve: async (_root, { status }, ctx) => {
+				const order = await ctx.db.order.findMany({ where: { status } })
+				return order
 			},
 		})
 		t.field('orderDetails', {
 			type: 'Order',
-			nullable: false,
 			args: {
-				id: schema.intArg({ required: true }),
+				id: schema.intArg({ nullable: false }),
 			},
-			resolve(_root, { id }, ctx) {
-				return ctx.db.order.findOne({ where: { id: id } })
+			resolve: async (_root, { id }, ctx) => {
+				const order = await ctx.db.order.findOne({ where: { id: id } })
+				return order
 			}
 		})
 	}
@@ -65,26 +67,28 @@ schema.extendType({
 		t.field('createOrder', {
 			type: 'Order',
 			args: {
-				initialQuantity: schema.intArg({ required: true }),
-				customerId: schema.intArg({ required: true }),
-				productId: schema.intArg({ required: true }),
-				date: schema.stringArg({ required: true }),
+				initialQuantity: schema.intArg({ nullable: false }),
+				customerId: schema.intArg({ nullable: false }),
+				productId: schema.intArg({ nullable: false }),
+				date: schema.stringArg({ nullable: false }),
 			},
-			resolve(_root, args, ctx) {
-				return ctx.db.order.create({
+			resolve: async (_root, { initialQuantity, customerId, productId, date }, ctx) => {
+				const order = await ctx.db.order.create({
 					data: {
-						initialQuantity: args.initialQuantity,
-						finalQuantity: args.initialQuantity,
-						date: args.date,
+						initialQuantity: initialQuantity,
+						finalQuantity: initialQuantity,
+						date: date,
 						status: "PENDING",
 						Customer: {
-							connect: { id: args.customerId }
+							connect: { id: customerId }
 						},
 						products: {
-							connect: { id: args.productId }
+							connect: { id: productId }
 						},
 					}
 				})
+
+				return order
 			}
 		})
 		t.field('updateOrder', {
@@ -98,14 +102,15 @@ schema.extendType({
 				}),
 				productIds: schema.intArg()
 			},
-			resolve(_root, { id, finalQuantity, status, productIds }, ctx) {
-				return ctx.db.order.update({
+			resolve: async (_root, { id, finalQuantity, status, productIds }, ctx) => {
+				const order = await ctx.db.order.update({
 					where: { id },
 					data: {
 						finalQuantity,
 						status
 					}
 				})
+				return order
 			}
 		})
 	}
