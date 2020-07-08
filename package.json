@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nexus dev",
     "build": "nexus build --deployment heroku",
-    "start": "node .nexus/build/api/app",
+    "start": "node .nexus/build/api/app.js",
     "format": "npx prettier --write './**/*.{ts,md}'"
   },
   "keywords": [
