@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nexus dev",
-    "build": "nexus build --deployment heroku",
+    "build": "nexus build",
     "start": "node .nexus/build/api/app.js",
     "format": "npx prettier --write './**/*.{ts,md}'"
   },
@@ -38,5 +38,8 @@
     "printWidth": 120,
     "useTabs": true,
     "tabWidth": 2
+  },
+  "engines": {
+    "node": ">=12.0.0"
   }
 }
