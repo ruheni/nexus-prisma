@@ -1,6 +1,6 @@
 datasource postgres {
   provider = "postgres"
-  url      = env("DATABASE_URL")
+  url      = env("HEROKU_POSTGRESQL_OLIVE_URL")
 }
 
 model Customer {
