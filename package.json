@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nexus dev",
-    "build": "nexus build --deployment vercel",
-    "start": "node .nexus/build/api/",
+    "build": "nexus build --deployment heroku",
+    "start": "node .nexus/build",
     "format": "npx prettier --write './**/*.{ts,md}'"
   },
   "keywords": [
