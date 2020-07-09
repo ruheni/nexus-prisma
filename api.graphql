@@ -71,6 +71,7 @@ type Customer {
   market: String!
   name: String!
   orders(orderBy: OrderOrderByInput, where: OrderWhereInput): [Order!]!
+  phoneNumber: String!
 }
 
 input CustomerWhereInput {

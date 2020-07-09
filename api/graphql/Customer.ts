@@ -8,6 +8,7 @@ schema.objectType({
 		t.model.contactName()
 		t.model.email()
 		t.model.market()
+		t.model.phoneNumber()
 		t.model.agents({
 			filtering: true,
 			ordering: true,

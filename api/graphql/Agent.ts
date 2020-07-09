@@ -49,7 +49,7 @@ schema.extendType({
 				name: schema.stringArg({ required: true }),
 				phoneNumber: schema.stringArg({ required: true }),
 				email: schema.stringArg({ required: true }),
-				customerId: schema.intArg({ nullable: false }),
+				customerId: schema.intArg({ required: true }),
 			},
 			resolve: async (_root, { name, email, phoneNumber, customerId }, ctx) => {
 				const agent = await ctx.db.agent.create({
