@@ -5,6 +5,7 @@
 [x] Add User authentication - related to mutations ⬆
 [ ] Review product and order schema-- adding multiple products to an order ⬆
 [ ] Many to Many relationship (Customer and Agent) ⬆
+[ ] Add error handling for update mutations ⬆
 [ ] Write tests ⬆
 [ ] Deployment ⬆
 [ ] Permissions ⬇

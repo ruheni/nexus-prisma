@@ -1,14 +1,10 @@
 {
   "name": "inventory-nexus",
   "version": "1.0.0",
-  "description": "",
+  "author": "Ruheni Alex",
+  "description": "Baraka Roses Inventory management - GraphQL API using Nexus, Prisma and Postgresql",
+  "license": "ISC",
   "main": "index.js",
-  "scripts": {
-    "dev": "nexus dev",
-    "build": "nexus build --deployment heroku",
-    "start": "node .nexus/build",
-    "format": "npx prettier --write './**/*.{ts,md}'"
-  },
   "keywords": [
     "Nexus",
     "GraphQL",
@@ -16,8 +12,13 @@
     "Prisma",
     "Postgresql"
   ],
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "dev": "nexus dev",
+    "build": "nexus build --deployment heroku",
+    "start": "node .nexus/build",
+    "format": "npx prettier --write './**/*.{ts,md}'",
+    "test": "jest"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^8.5.1",
@@ -28,8 +29,11 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/jest": "^26.0.4",
     "@types/jsonwebtoken": "^8.5.0",
-    "prettier": "^2.0.5"
+    "jest": "^26.1.0",
+    "prettier": "^2.0.5",
+    "ts-jest": "^26.1.1"
   },
   "prettier": {
     "semi": false,
@@ -38,6 +42,10 @@
     "printWidth": 120,
     "useTabs": true,
     "tabWidth": 2
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   },
   "engines": {
     "node": ">=12.0.0"
