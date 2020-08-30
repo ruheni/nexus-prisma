@@ -66,13 +66,12 @@ schema.extendType({
 				customerId: schema.intArg({ nullable: false }),
 				productIds: schema.intArg({
 					list: true,
-					nullable: false
+					nullable: false,
 				}),
 				date: schema.stringArg({ nullable: false }),
 			},
 			resolve: async (_root, { customerId, productIds, date }, ctx) => {
-
-				const ids = productIds.map(id => ({ id }))
+				const ids = productIds.map((id) => ({ id }))
 
 				const order = await ctx.db.order.create({
 					data: {
@@ -86,8 +85,8 @@ schema.extendType({
 						},
 					},
 					include: {
-						orderedProducts: true
-					}
+						orderedProducts: true,
+					},
 				})
 
 				return order

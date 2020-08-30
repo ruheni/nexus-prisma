@@ -65,7 +65,6 @@ schema.extendType({
 				agentIds: schema.intArg({ nullable: false, list: true }),
 			},
 			resolve: async (_root, { name, contactName, market, email, phoneNumber, agentIds }, ctx) => {
-
 				const ids = agentIds.map((id: any) => ({ id }))
 				const customer = await ctx.db.customer.create({
 					data: {

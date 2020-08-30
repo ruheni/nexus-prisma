@@ -3,7 +3,7 @@
 [x] Migrate to t.model ⬆
 [x] Update Queries and Mutations ⬆
 [x] Add User authentication - related to mutations ⬆
-[ ] Review product and order schema-- adding multiple products to an order ⬆
+[x] Review product and order schema-- adding multiple products to an order ⬆
 [x] Many to Many relationship (Customer and Agent) ⬆
 [ ] Add error handling for update mutations ⬆
 [ ] Write tests ⬆

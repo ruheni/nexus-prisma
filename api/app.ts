@@ -7,7 +7,7 @@ import { rules } from './utils/permissions'
 
 import cookieParser from 'cookie-parser'
 
-// Add cookie-parser middleware to Express 
+// Add cookie-parser middleware to Express
 server.express.use(cookieParser())
 
 use(prisma())
@@ -17,7 +17,7 @@ use(
 	auth({
 		appSecret: APP_SECRET,
 		useCookie: true,
-		cookieName: 'token'
+		cookieName: 'token',
 	}),
 )
 

@@ -86,5 +86,3 @@ migration 20200709102801-postgres-db-added..20200809144304-trying-to-fix-models-
  model Agent {
    id          Int       @id @default(autoincrement())
 ```
-
-
