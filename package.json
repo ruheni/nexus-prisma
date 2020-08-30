@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "dev": "nexus dev",
-    "build": "nexus build --deployment heroku",
+    "build": "nexus build",
     "start": "node .nexus/build",
     "format": "npx prettier --write './**/*.{ts,md}'",
     "test": "jest"

@@ -1,7 +1,6 @@
 import { schema } from 'nexus'
 import { hash, compare } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
-import { APP_SECRET } from '../utils'
 
 schema.enumType({
 	name: 'Role',
@@ -79,7 +78,7 @@ schema.extendType({
 				})
 
 				return {
-					token: sign({ userId: user.id }, APP_SECRET),
+					token: sign({ userId: user.id, role }, `${process.env.APP_SECRET}`),
 					user,
 				}
 			},
@@ -107,7 +106,7 @@ schema.extendType({
 				}
 
 				return {
-					token: sign({ userId: user.id }, APP_SECRET),
+					token: sign({ userId: user.id }, `${process.env.APP_SECRET}`),
 					user,
 				}
 			},
