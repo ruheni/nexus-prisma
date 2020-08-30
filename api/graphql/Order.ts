@@ -10,13 +10,11 @@ schema.objectType({
 	name: 'Order',
 	definition(t) {
 		t.model.id()
-		t.model.initialQuantity()
-		t.model.finalQuantity()
 		t.model.status()
 		t.model.Customer()
-		t.model.products()
 		t.model.createdAt()
 		t.model.date()
+		t.model.orderedProducts()
 	},
 })
 
@@ -65,25 +63,31 @@ schema.extendType({
 		t.field('createOrder', {
 			type: 'Order',
 			args: {
-				initialQuantity: schema.intArg({ nullable: false }),
 				customerId: schema.intArg({ nullable: false }),
-				productId: schema.intArg({ nullable: false }),
+				productIds: schema.intArg({
+					list: true,
+					nullable: false
+				}),
 				date: schema.stringArg({ nullable: false }),
 			},
-			resolve: async (_root, { initialQuantity, customerId, productId, date }, ctx) => {
+			resolve: async (_root, { customerId, productIds, date }, ctx) => {
+
+				const ids = productIds.map(id => ({ id }))
+
 				const order = await ctx.db.order.create({
 					data: {
-						initialQuantity: initialQuantity,
-						finalQuantity: initialQuantity,
-						date: date,
+						date,
 						status: 'PENDING',
 						Customer: {
 							connect: { id: customerId },
 						},
-						products: {
-							connect: { id: productId },
+						orderedProducts: {
+							connect: ids,
 						},
 					},
+					include: {
+						orderedProducts: true
+					}
 				})
 
 				return order
@@ -100,11 +104,10 @@ schema.extendType({
 				}),
 				productIds: schema.intArg(),
 			},
-			resolve: async (_root, { id, finalQuantity, status, productIds }, ctx) => {
+			resolve: async (_root, { id, status, productIds }, ctx) => {
 				const order = await ctx.db.order.update({
 					where: { id },
 					data: {
-						finalQuantity,
 						status,
 					},
 				})

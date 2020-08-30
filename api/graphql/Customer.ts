@@ -41,7 +41,7 @@ schema.extendType({
 			},
 			resolve: async (_root, { id }, ctx) => {
 				const customer = await ctx.db.customer.findOne({
-					where: { id: id },
+					where: { id },
 				})
 
 				return customer
@@ -62,18 +62,20 @@ schema.extendType({
 				market: schema.stringArg({ required: true }),
 				email: schema.stringArg({ required: true }),
 				phoneNumber: schema.stringArg({ required: true }),
-				agentId: schema.intArg({ nullable: false }),
+				agentIds: schema.intArg({ nullable: false, list: true }),
 			},
-			resolve: async (_root, { name, contactName, market, email, phoneNumber, agentId }, ctx) => {
+			resolve: async (_root, { name, contactName, market, email, phoneNumber, agentIds }, ctx) => {
+
+				const ids = agentIds.map((id: any) => ({ id }))
 				const customer = await ctx.db.customer.create({
 					data: {
 						name: name,
 						contactName: contactName,
-						email: contactName,
+						email: email,
 						market: market,
 						phoneNumber: phoneNumber,
 						agents: {
-							connect: { id: agentId },
+							connect: ids,
 						},
 					},
 				})

@@ -83,6 +83,7 @@ schema.extendType({
 						grade: grade,
 					},
 				})
+
 				return product
 			},
 		})
